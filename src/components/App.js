@@ -4,9 +4,13 @@ import Header from "./Header";
 import itemData from "../data/items";
 
 function App() {
+
+  //Create items and dark mode state with the data provided
   const [items, setItems] = useState(itemData);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+
+  //Function to toggle dark mode wyhen button is pressed
   function handleDarkModeClick() {
     setIsDarkMode((isDarkMode) => !isDarkMode);
   }

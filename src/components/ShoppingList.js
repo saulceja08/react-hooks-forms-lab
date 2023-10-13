@@ -4,24 +4,54 @@ import Filter from "./Filter";
 import Item from "./Item";
 
 function ShoppingList({ items }) {
-  const [selectedCategory, setSelectedCategory] = useState("All");
 
+  //create state for each action
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [itemsList, setItemsList] = useState(items)
+  const [searchChar, setSearchChar] = useState("")
+
+  function onSearchChange(event) {
+    setSearchChar(event.target.value)
+  }
+
+  //FUnction that updates text when a user types
   function handleCategoryChange(event) {
     setSelectedCategory(event.target.value);
   }
 
-  const itemsToDisplay = items.filter((item) => {
+  //Filter by category
+  const itemsToDisplay = itemsList.filter((item) => {
     if (selectedCategory === "All") return true;
 
     return item.category === selectedCategory;
   });
 
+  //Filter by search text 
+  const itemsToDisplayName = itemsToDisplay.filter( (item) => {
+    if (item.name.toLowerCase().includes(searchChar.toLowerCase())) {
+      return true
+    } 
+    else {
+      return false
+    }
+  })
+
+
+  function onItemFormSubmit(element) {
+    setItemsList([...items, element])
+    console.log(itemsList);
+  }
+
   return (
     <div className="ShoppingList">
-      <ItemForm />
-      <Filter onCategoryChange={handleCategoryChange} />
+      <ItemForm onItemFormSubmit={onItemFormSubmit}/>
+      <Filter 
+      onCategoryChange={handleCategoryChange} 
+      searchChar={searchChar} 
+      onSearchChange={onSearchChange}
+    />
       <ul className="Items">
-        {itemsToDisplay.map((item) => (
+        {itemsToDisplayName.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
         ))}
       </ul>
